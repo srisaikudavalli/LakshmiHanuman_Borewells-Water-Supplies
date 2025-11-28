@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile | Lakshmi Hanuman Borewells</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'main/logo.png' %}">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; }
+        .profile-header { background-color: #0a2558; padding: 60px 0; color: white; text-align: center; border-radius: 0 0 30px 30px; }
+        .profile-card { max-width: 600px; margin: -50px auto 50px; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .btn-update { background-color: #ffc107; color: #0a2558; font-weight: 700; width: 100%; border: none; padding: 12px; border-radius: 50px; }
+        .btn-update:hover { background-color: #e0a800; }
+        label { font-weight: 600; color: #0a2558; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="container">
+            <i class="fas fa-user-circle fa-5x mb-3"></i>
+            <h2>Hello, {{ user.username }}</h2>
+            <p class="opacity-75">Manage your account details below</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <h4 class="mb-4 fw-bold text-center" style="color: #0a2558;">Update Profile</h4>
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>First Name</label>
+                        {{ u_form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label>Last Name</label>
+                        {{ u_form.last_name }}
+                    </div>
+                </div>
+
+                <label>Email Address</label>
+                {{ u_form.email }}
+
+                <label>Mobile Number</label>
+                {{ p_form.mobile_number }}
+
+                <button type="submit" class="btn btn-update mt-4">Update Details</button>
+                <a href="{% url 'home' %}" class="btn btn-link text-muted w-100 mt-2 text-decoration-none">Back to Home</a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

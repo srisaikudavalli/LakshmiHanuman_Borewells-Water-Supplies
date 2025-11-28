@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load notification_tags %}
+
+{% block userlinks %}
+    {% count_pending_orders as pending_count %}
+    {% if pending_count > 0 %}
+        <a href="/admin/main/booking/?status__exact=PENDING" style="color: #ff4444; font-weight: bold; font-size: 16px; margin-right: 20px; text-decoration: none;">
+            🔔 {{ pending_count }} NEW ORDERS
+        </a>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

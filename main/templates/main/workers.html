@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Worker Management | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" type="image/png" href="{% static 'main/logo.png' %}">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; }
+        .dashboard-header { background-color: #0a2558; color: white; padding: 30px; border-radius: 0 0 20px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .worker-card { background: white; border-radius: 15px; padding: 15px 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border-left: 5px solid #ffc107; transition: 0.3s; }
+        .worker-card:hover { transform: translateX(5px); }
+        .role-badge { background: #e3f2fd; color: #0a2558; padding: 5px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .wage-text { color: #28a745; font-weight: 700; font-size: 1rem; }
+        
+        .form-check-input { width: 30px; height: 30px; cursor: pointer; border: 2px solid #0a2558; }
+        .btn-save { background-color: #0a2558; color: white; width: 100%; padding: 15px; border-radius: 50px; font-weight: 700; font-size: 1.2rem; border: none; }
+        .btn-save:hover { background-color: #ffc107; color: #0a2558; }
+        
+        .date-picker-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: inline-block; }
+        
+        .advance-input {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px 10px;
+            width: 100px;
+            margin-right: 15px;
+            text-align: center;
+        }
+        .advance-input:focus { border-color: #ffc107; outline: none; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-header text-center pb-4">
+        <h2><i class="fas fa-users-cog me-2"></i> Attendance Register</h2>
+        <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light mt-2 rounded-pill">Back to Home</a>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+        
+        <div class="text-center mb-4">
+            <form method="get" class="date-picker-box">
+                <label class="fw-bold text-muted mb-2">Select Date to Mark:</label>
+                <div class="input-group">
+                    <input type="date" name="date" class="form-control" value="{{ selected_date|date:'Y-m-d' }}" required>
+                    <button type="submit" class="btn btn-primary">Go</button>
+                </div>
+            </form>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <h5 class="mb-4 text-center fw-bold" style="color: #0a2558;">
+                        Marking for: <span class="text-warning">{{ selected_date|date:"d M, Y" }}</span>
+                    </h5>
+                    
+                    {% for worker in workers %}
+                    <div class="worker-card">
+                        <div class="d-flex align-items-center" style="min-width: 150px;">
+                            <div class="bg-light rounded-circle p-3 me-3 text-primary">
+                                <i class="fas fa-user-hard-hat fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">{{ worker.name }}</h5>
+                                <span class="role-badge">{{ worker.role }}</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-end">
+                            
+                            <div class="text-end me-3">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Advance (₹)</small>
+                                <input type="number" name="advance_{{ worker.id }}" class="advance-input" placeholder="0">
+                            </div>
+
+                            <div class="text-end me-3 d-none d-sm-block">
+                                <div class="wage-text">₹{{ worker.daily_wage }}</div>
+                            </div>
+
+                            <div class="form-check m-0">
+                                <input class="form-check-input" type="checkbox" name="attendance_{{ worker.id }}" 
+                                    {% if worker.id in present_worker_ids %}checked{% endif %}>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-5">
+                        No workers found.
+                    </div>
+                    {% endfor %}
+
+                    {% if workers %}
+                    <button type="submit" class="btn btn-save shadow mt-4 mb-5">
+                        Update Data <i class="fas fa-check-double ms-2"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container mt-4 mb-5">
+        <div class="card shadow border-0 rounded-4 overflow-hidden">
+            <div class="card-header text-white p-3" style="background-color: #ffc107;">
+                <h4 class="mb-0 text-dark fw-bold"><i class="fas fa-file-invoice-dollar me-2"></i> Detailed Salary Report</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-start ps-4">Worker</th>
+                                <th>Attendance</th>
+                                <th>Earned</th>
+                                <th class="text-danger">Advance Taken</th>
+                                <th class="bg-success text-white">Net Payable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in salary_report %}
+                            <tr>
+                                <td class="text-start ps-4">
+                                    <div class="fw-bold text-primary">{{ item.name }}</div>
+                                    <span class="badge bg-secondary" style="font-size: 0.7rem;">{{ item.role }}</span>
+                                </td>
+                                
+                                <td style="width: 25%;">
+                                    <div class="fw-bold">{{ item.days_worked }} Days</div>
+                                    <div style="font-size: 0.75rem; color: #666; line-height: 1.2;">
+                                        {% for date_str in item.dates_list %}
+                                            {{ date_str }}{% if not forloop.last %}, {% endif %}
+                                        {% empty %}
+                                            -
+                                        {% endfor %}
+                                    </div>
+                                </td>
+
+                                <td class="text-muted fw-bold">₹{{ item.work_pay }}</td>
+
+                                <td style="width: 25%;" class="text-danger">
+                                    {% if item.total_advance > 0 %}
+                                        <div class="fw-bold">- ₹{{ item.total_advance }}</div>
+                                        <div style="font-size: 0.75rem; opacity: 0.8;">
+                                            {% for adv_str in item.advance_list %}
+                                                <div class="badge bg-danger bg-opacity-10 text-danger border border-danger mb-1">{{ adv_str }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td class="bg-success bg-opacity-10">
+                                    <strong class="text-success" style="font-size: 1.2rem;">
+                                        ₹{{ item.net_payable }}
+                                    </strong>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-muted py-4">No records found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if messages %}
+    
+    <script id="django-messages" type="application/json">
+        [
+            {% for message in messages %}
+                {
+                    "level": "{{ message.tags }}",
+                    "text": "{{ message|escapejs }}"
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const messages = JSON.parse(document.getElementById('django-messages').textContent);
+                messages.forEach(msg => {
+                    Swal.fire({
+                        title: msg.level.includes('success') ? 'Success!' : 'Notification',
+                        text: msg.text,
+                        icon: msg.level.includes('success') ? 'success' : 'info',
+                        confirmButtonColor: '#0a2558',
+                        confirmButtonText: 'OK',
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                });
+            } catch(e) {
+                console.error("Error parsing messages:", e);
+            }
+        });
+    </script>
+    {% endif %}
+    </body>
+</html>
