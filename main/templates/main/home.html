@@ -110,6 +110,52 @@
         footer { background: var(--primary-blue); color: white; padding-top: 60px; }
         .footer-map iframe { border-radius: 10px; width: 100%; height: 200px; }
         .accordion-button:not(.collapsed) { background-color: var(--primary-blue); color: white; }
+
+        /* --- MOBILE SPECIFIC TWEAKS --- */
+        @media (max-width: 768px) {
+            /* 1. Tighten Hero Section Spacing */
+            .hero-section {
+                padding-top: 100px; /* Reduced from 80px + extra spacing */
+                padding-bottom: 60px;
+                text-align: center;
+                min-height: auto; /* Let content define height */
+            }
+
+            /* 2. Resize Hero Image (Visiting Card) */
+            .hero-rig-img {
+                max-width: 90%; /* Prevent it from touching edges */
+                margin-top: 30px;
+                height: auto;
+            }
+
+            /* 3. Adjust Font Sizes for Mobile */
+            .hero-title {
+                font-size: 2rem; /* Smaller than desktop 3.5rem */
+            }
+            .lead {
+                font-size: 1rem;
+            }
+
+            /* 4. Fix Navbar Toggler */
+            .navbar-toggler {
+                border-color: var(--primary-blue);
+            }
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(10, 37, 88, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+            }
+
+            /* 5. Improve Grid Spacing */
+            .col-lg-6 {
+                margin-bottom: 30px;
+            }
+            
+            /* 6. Founder Image Sizing */
+            .founder-img {
+                max-height: 300px; /* Allow it to be taller on mobile if needed */
+                width: 100%;
+                object-fit: cover;
+            }
+        }
     </style>
 </head>
 <body>
@@ -209,10 +255,39 @@
 
     <div class="container" data-aos="fade-up">
         <div class="row info-strip shadow rounded">
-            <div class="col-md-3 info-box"><h3 class="counter" data-target="25">0</h3><p>Years Experience</p></div>
-            <div class="col-md-3 info-box"><h3 class="counter" data-target="250">0</h3><p>Projects</p></div>
-            <div class="col-md-3 info-box"><h3 class="counter" data-target="100">0</h3><p>Success</p></div>
-            <div class="col-md-3 info-box"><h3 class="counter" data-target="24">0</h3><p>Support</p></div>
+            
+            <div class="col-md-3 info-box">
+                <div class="d-flex justify-content-center align-items-baseline">
+                    <h3 class="counter" data-target="25">0</h3>
+                    <span class="fs-3 fw-bold ms-1">+</span>
+                </div>
+                <p>Years Experience</p>
+            </div>
+
+            <div class="col-md-3 info-box">
+                <div class="d-flex justify-content-center align-items-baseline">
+                    <h3 class="counter" data-target="250">0</h3>
+                    <span class="fs-3 fw-bold ms-1">+</span>
+                </div>
+                <p>Projects</p>
+            </div>
+
+            <div class="col-md-3 info-box">
+                <div class="d-flex justify-content-center align-items-baseline">
+                    <h3 class="counter" data-target="100">0</h3>
+                    <span class="fs-3 fw-bold ms-1">%</span>
+                </div>
+                <p>Success</p>
+            </div>
+
+            <div class="col-md-3 info-box">
+                <div class="d-flex justify-content-center align-items-baseline">
+                    <h3 class="counter" data-target="24">0</h3>
+                    <span class="fs-3 fw-bold ms-1">/7</span>
+                </div>
+                <p>Support</p>
+            </div>
+
         </div>
     </div>
 
