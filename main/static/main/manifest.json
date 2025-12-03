@@ -1,0 +1,21 @@
+{
+  "name": "Lakshmi Hanuman Borewells",
+  "short_name": "LH Borewells",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a2558",
+  "theme_color": "#0a2558",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/static/main/logo2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/main/logo2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
