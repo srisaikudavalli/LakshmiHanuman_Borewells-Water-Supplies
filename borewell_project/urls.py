@@ -23,19 +23,18 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # ROOT URL now points to Login
-    path('', views.login_user, name='login'),
-    
-    # The actual website is moved to 'home/'
-    path('home/', views.home, name='home'),
+    # ROOT URL points directly to the Website now
+    path('', views.home, name='home'),
     
     path('book/', views.book_service, name='book'),
     path('success/', views.success, name='success'),
     path('review/', views.add_review, name='add_review'),
-    path('register/', views.register_user, name='register'),
-    path('logout/', views.logout_user, name='logout'),
     path('workers/', views.worker_dashboard, name='worker_dashboard'),
-    path('profile/', views.profile, name='profile'),
+    
+    # We can keep these for Admin login purposes if you want, 
+    # or you can just use /admin/ path. 
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
 ]
 
 # This tells Django: "If DEBUG mode is on, serve media files from MEDIA_ROOT"

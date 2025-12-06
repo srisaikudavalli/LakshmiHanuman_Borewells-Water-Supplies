@@ -17,7 +17,7 @@ from .forms import BookingForm, ReviewForm, UserUpdateForm, ProfileUpdateForm
 from .models import Service, Review, GalleryItem # <-- Import GalleryItem
 
 # This line blocks anyone who is not logged in!
-@login_required(login_url='login') 
+
 def home(request):
     services = Service.objects.all()
     reviews = Review.objects.all()
@@ -32,7 +32,7 @@ def home(request):
 def success(request):
     return render(request, 'main/success.html')
 
-@login_required(login_url='login')
+
 def book_service(request):
     if request.method == 'POST':
         form = BookingForm(request.POST)
